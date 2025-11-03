@@ -1,4 +1,4 @@
-const CACHE_NAME = 'fitjourney-cache-v1';
+const CACHE_NAME = 'fitjourney-cache-v2';
 const STATIC_ASSETS = ['/', '/index.html', '/manifest.webmanifest'];
 
 self.addEventListener('install', (event) => {
