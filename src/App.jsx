@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react"
 import { getAll, saveAll, todayISO, sum, maxBy, formatDate } from "./storage"
 
-// --------- Minimal styles (kept inline so no setup needed) ----------
+// --------- Minimal styles ----------
 const page = { minHeight: "100vh", background: "#0b1220", color: "#e6ecff", padding: 16, fontFamily: "system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial" }
 const container = { maxWidth: 980, margin: "0 auto" }
 const h1 = { fontSize: 28, margin: "12px 0 8px" }
@@ -21,7 +21,7 @@ const thtd = { borderBottom: "1px solid #1f2937", padding: "10px 8px", textAlign
 export default function App() {
   const [state, setState] = useState(() => getAll())
 
-  // derived stats
+  // derived
   const startingWeight = useMemo(() => state.weights[0]?.weight ?? "—", [state.weights])
   const currentWeight  = useMemo(() => state.weights[state.weights.length - 1]?.weight ?? "—", [state.weights])
   const bestPushupsDay = useMemo(() => {
@@ -29,16 +29,13 @@ export default function App() {
     const best = maxBy(state.pushups, x => x.count)
     return `${best.count} (${formatDate(best.date)})`
   }, [state.pushups])
-
   const todaysPushups = useMemo(() => {
     const todayEntries = state.pushups.filter(p => p.date === todayISO())
     return sum(todayEntries.map(p => p.count))
   }, [state.pushups])
 
-  // persist whenever state changes
   useEffect(() => { saveAll(state) }, [state])
 
-  // ------- Mutators
   function addWeight(e) {
     e.preventDefault()
     const weight = Number(e.target.weight.value)
@@ -109,22 +106,10 @@ export default function App() {
         {/* Journey Summary */}
         <div style={{...card, marginBottom:16}}>
           <div style={grid}>
-            <div style={stat}>
-              <div style={label}>Starting Weight</div>
-              <div style={big}>{startingWeight}</div>
-            </div>
-            <div style={stat}>
-              <div style={label}>Current Weight</div>
-              <div style={big}>{currentWeight}</div>
-            </div>
-            <div style={stat}>
-              <div style={label}>Best Pushups in a Day</div>
-              <div style={big}>{bestPushupsDay}</div>
-            </div>
-            <div style={stat}>
-              <div style={label}>Pushups Today</div>
-              <div style={big}>{todaysPushups}</div>
-            </div>
+            <div style={stat}><div style={label}>Starting Weight</div><div style={big}>{startingWeight}</div></div>
+            <div style={stat}><div style={label}>Current Weight</div><div style={big}>{currentWeight}</div></div>
+            <div style={stat}><div style={label}>Best Pushups in a Day</div><div style={big}>{bestPushupsDay}</div></div>
+            <div style={stat}><div style={label}>Pushups Today</div><div style={big}>{todaysPushups}</div></div>
           </div>
         </div>
 
@@ -174,9 +159,7 @@ export default function App() {
             <div>
               <div style={{opacity:.8, marginBottom:6}}>Pushups</div>
               <table style={table}>
-                <thead>
-                  <tr><th style={thtd}>Date</th><th style={thtd}>Count</th></tr>
-                </thead>
+                <thead><tr><th style={thtd}>Date</th><th style={thtd}>Count</th></tr></thead>
                 <tbody>
                   {state.pushups.slice().reverse().map((p, i) => (
                     <tr key={i}><td style={thtd}>{formatDate(p.date)}</td><td style={thtd}>{p.count}</td></tr>
@@ -188,9 +171,7 @@ export default function App() {
             <div>
               <div style={{opacity:.8, marginBottom:6}}>Weights</div>
               <table style={table}>
-                <thead>
-                  <tr><th style={thtd}>Date</th><th style={thtd}>Weight</th></tr>
-                </thead>
+                <thead><tr><th style={thtd}>Date</th><th style={thtd}>Weight</th></tr></thead>
                 <tbody>
                   {state.weights.slice().reverse().map((w, i) => (
                     <tr key={i}><td style={thtd}>{formatDate(w.date)}</td><td style={thtd}>{w.weight}</td></tr>
@@ -202,9 +183,7 @@ export default function App() {
             <div>
               <div style={{opacity:.8, marginBottom:6}}>Peloton Rides</div>
               <table style={table}>
-                <thead>
-                  <tr><th style={thtd}>Date</th><th style={thtd}>Ride</th><th style={thtd}>Min</th><th style={thtd}>Output</th></tr>
-                </thead>
+                <thead><tr><th style={thtd}>Date</th><th style={thtd}>Ride</th><th style={thtd}>Min</th><th style={thtd}>Output</th></tr></thead>
                 <tbody>
                   {state.rides.map((r, i) => (
                     <tr key={i}>
@@ -220,12 +199,10 @@ export default function App() {
           </div>
         </div>
 
-        <div style={{opacity:.6, fontSize:12, marginTop:12}}>Data is saved to your device only (localStorage). No account required.</div>
+        <div style={{opacity:.6, fontSize:12, marginTop:12}}>
+          Data is saved to your device only (localStorage). No account required.
+        </div>
       </div>
-    </div>
-  )
-}
-
     </div>
   )
 }
